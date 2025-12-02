@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Plus, Search, Filter, FileText, Users } from "lucide-react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import {
   Select,
@@ -9,9 +9,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
-import { ServiceOrderTable } from "../../components/ServiceOrderTable";
-import { NewOrderDialog } from "../../components/NewOrderDialog"; 
+} from "@/components/ui/select";
+import { ServiceOrderTable } from "@/components/ServiceOrderTable";
+import { NewOrderDialog } from "@/components/NewOrderDialog";
 
 const Index = () => {
   const navigate = useNavigate();

@@ -2,12 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: "class",
-content: [
-  "./src/pages/**/*.{js,jsx,ts,tsx}",
-  "./src/components/**/*.{js,jsx,ts,tsx}",
-  "./src/app/**/*.{js,jsx,ts,tsx}",
-  "./src/**/*.{js,jsx,ts,tsx}",
-],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -88,34 +83,24 @@ content: [
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fadeIn 0.5s ease-out",
-      },
       keyframes: {
-        ...{
-          "accordion-down": {
-            from: {
-              height: "0",
-            },
-            to: {
-              height: "var(--radix-accordion-content-height)",
-            },
-          },
-          "accordion-up": {
-            from: {
-              height: "var(--radix-accordion-content-height)",
-            },
-            to: {
-              height: "0",
-            },
-          },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
         fadeIn: {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fadeIn 0.5s ease-out",
       },
     },
   },
