@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/select";
 import { ServiceOrderTable } from "@/components/ServiceOrderTable";
 import { NewOrderDialog } from "@/components/NewOrderDialog";
+import { ServiceOrder } from "@/types/serviceOrder";
 
 const Index = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [orders, setOrders] = useState([
+  const [orders, setOrders] = useState<ServiceOrder[]>([
     {
       id: "OS-001",
       clientName: "João Silva",
@@ -57,8 +58,8 @@ const Index = () => {
     },
   ]);
 
-  const handleAddOrder = (order) => {
-    const newOrder = {
+  const handleAddOrder = (order: Omit<ServiceOrder, "id">) => {
+    const newOrder: ServiceOrder = {
       ...order,
       id: `OS-${String(orders.length + 1).padStart(3, "0")}`,
     };
