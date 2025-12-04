@@ -3,8 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/clientes/Index";
-import ClienteForm from "./pages/clientes/ClienteForm";
+import Index from "./pages/os/Index";
+import ClienteForm from "./pages/clientes/Form";
 import NotFound from "./pages/clientes/NotFound";
 
 const queryClient = new QueryClient();

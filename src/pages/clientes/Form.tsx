@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ClienteApiService } from "@/services/clienteApi";
+import { ClienteApiService } from "@/services/clientes/clienteApi";
 import { TipoPessoa } from "@/types/cliente";
 import { toast } from "@/hooks/use-toast";
 import { User, Building2, MapPin, Phone, Mail, Save, X } from "lucide-react";
@@ -58,7 +58,7 @@ const formSchema = z.object({
 
 export default function ClienteForm() {
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate(); 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -443,7 +443,7 @@ export default function ClienteForm() {
                 type="button"
                 variant="outline"
                 size="lg"
-                onClick={() => form.reset()}
+                onClick={() => navigate("/")}
                 disabled={isLoading}
               >
                 <X className="h-4 w-4" />

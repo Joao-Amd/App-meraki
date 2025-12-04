@@ -1,6 +1,6 @@
 import { ClienteDto, Cliente } from "@/types/cliente";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:44360";
 
 export class ClienteApiService {
   private static getHeaders(): HeadersInit {
