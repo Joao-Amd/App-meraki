@@ -122,14 +122,6 @@ const Index = () => {
                 </SelectContent>
               </Select>
 
-              <Button 
-                variant="outline" 
-                onClick={() => navigate("/cadastro/cliente")}
-              >
-                <Users className="h-4 w-4 mr-2" />
-                Clientes
-              </Button>
-
               <Button onClick={() => setIsDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Ordem

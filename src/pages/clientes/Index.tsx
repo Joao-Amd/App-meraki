@@ -37,28 +37,6 @@ const ClienteList = () => {
         description: "Não foi possível carregar os clientes. Verifique a conexão com o servidor.",
         variant: "destructive",
       });
-      // Dados de exemplo para demonstração
-      setClientes([
-        {
-          id: "1",
-          identificacao: 1,
-          nome: "João Silva",
-          tipoPessoa: TipoPessoa.Fisica,
-          cpf: "123.456.789-00",
-          contato: { telefone: "(11) 1234-5678", celular: "(11) 91234-5678", email: "joao@email.com" },
-          endereco: { logradouro: "Rua das Flores", numero: "123", complemento: "", bairro: "Centro", cidade: "São Paulo", uf: "SP", cep: "01234-567" },
-        },
-        {
-          id: "2",
-          identificacao: 2,
-          nome: "Tech Solutions",
-          tipoPessoa: TipoPessoa.Juridica,
-          cpf: "",
-          dadosCorporativo: { razaoSocial: "Tech Solutions LTDA", nomeFantasia: "Tech Solutions", cnpj: "12.345.678/0001-90", inscricaoEstadual: "123456789", inscricaoMunicipal: "987654321" },
-          contato: { telefone: "(11) 2345-6789", celular: "(11) 92345-6789", email: "contato@techsolutions.com" },
-          endereco: { logradouro: "Av. Paulista", numero: "1000", complemento: "Sala 101", bairro: "Bela Vista", cidade: "São Paulo", uf: "SP", cep: "01310-100" },
-        },
-      ]);
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +67,12 @@ const ClienteList = () => {
             <Input
               placeholder="Buscar por nome, CPF ou CNPJ..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              // onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  loadClientes();
+                }
+              }}
               className="pl-10"
             />
           </div>

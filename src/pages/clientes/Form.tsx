@@ -443,7 +443,7 @@ export default function ClienteForm() {
                 type="button"
                 variant="outline"
                 size="lg"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/clientes")}
                 disabled={isLoading}
               >
                 <X className="h-4 w-4" />
