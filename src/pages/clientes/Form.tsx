@@ -23,7 +23,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ClienteApiService } from "@/services/clientes/clienteApi";
-import { TipoPessoa } from "@/types/cliente";
+import { TipoPessoa } from "@/types/Clientes/cliente";
 import { toast } from "@/hooks/use-toast";
 import { User, Building2, MapPin, Phone, Mail, Save, X } from "lucide-react";
 

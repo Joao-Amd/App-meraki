@@ -1,4 +1,5 @@
-import { ClienteDto, Cliente } from "@/types/cliente";
+import { ClienteDto, Cliente } from "@/types/Clientes/cliente";
+import { QueryParams, PagedResult } from "@/types/QueryParams";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:44360";
 
@@ -37,8 +38,9 @@ export class ClienteApiService {
     }
   }
 
-  static async listar(): Promise<Cliente[]> {
-    const response = await fetch(`${API_BASE_URL}/Cadastros/Cliente`, {
+  static async listar(params: QueryParams): Promise<PagedResult<Cliente>> {
+    const queryString = this.buildQueryString(params);
+    const response = await fetch(`${API_BASE_URL}/Cadastros/Cliente?${queryString}`, {
       method: "GET",
       headers: this.getHeaders(),
     });
@@ -61,5 +63,24 @@ export class ClienteApiService {
     }
 
     return response.json();
+  }
+
+   private static buildQueryString(params: QueryParams): string {
+    const searchParams = new URLSearchParams();
+    searchParams.append("pageNumber", params.pageNumber.toString());
+    searchParams.append("pageSize", params.pageSize.toString());
+    searchParams.append("sortDescending", params.sortDescending.toString());
+
+    if (params.searchBy) {
+      searchParams.append("searchBy", params.searchBy);
+    }
+    if (params.searchTerm) {
+      searchParams.append("searchTerm", params.searchTerm);
+    }
+    if (params.sortBy) {
+      searchParams.append("sortBy", params.sortBy);
+    }
+
+    return searchParams.toString();
   }
 }
