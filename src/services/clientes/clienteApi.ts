@@ -1,5 +1,5 @@
 import { ClienteDto, Cliente } from "@/types/Clientes/cliente";
-import { QueryParams, PagedResult } from "@/types/QueryParams";
+import { QueryParams, PagedResult } from "@/types/query";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:44360";
 

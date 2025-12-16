@@ -92,6 +92,7 @@ export default function ClienteForm() {
       toast({
         title: "Sucesso!",
         description: "Cliente cadastrado com sucesso.",
+        duration: 3500
       });
       form.reset();
     } catch (error: any) {

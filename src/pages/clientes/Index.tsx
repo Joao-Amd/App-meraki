@@ -179,7 +179,6 @@ const ClienteList = () => {
                 <TableRow
                   key={cliente.id}
                   className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => navigate(`/cadastro/cliente/${cliente.id}`)}
                 >
                   <TableCell className="font-medium">{cliente.identificacao}</TableCell>
                   <TableCell>
