@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useNavigate } from "react-router-dom";
-import { Cliente, TipoPessoa } from "@/types/Clientes/cliente";
+import { Cliente, TipoPessoa } from "@/types/clientes/cliente";
 import { ClienteApiService } from "@/services/clientes/clienteApi";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryParams } from "@/hooks/useQueryParams";

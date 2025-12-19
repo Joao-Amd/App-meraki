@@ -23,11 +23,11 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ClienteApiService } from "@/services/clientes/clienteApi";
-import { TipoPessoa } from "@/types/Clientes/cliente";
+import { TipoPessoa } from "@/types/clientes/cliente";
 import { toast } from "@/hooks/use-toast";
 import { User, Building2, MapPin, Phone, Mail, Save, X } from "lucide-react";
 
-const formSchema = z.object({
+const clienteSchema = z.object({
   nome: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
   tipoPessoa: z.nativeEnum(TipoPessoa),
   cpf: z.string().optional(),
@@ -59,8 +59,8 @@ const formSchema = z.object({
 export default function ClienteForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate(); 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof clienteSchema>>({
+    resolver: zodResolver(clienteSchema),
     defaultValues: {
       nome: "",
       tipoPessoa: TipoPessoa.Fisica,
@@ -85,7 +85,7 @@ export default function ClienteForm() {
 
   const tipoPessoa = form.watch("tipoPessoa");
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof clienteSchema>) => {
     setIsLoading(true);
     try {
       await ClienteApiService.inserir(values as any);
