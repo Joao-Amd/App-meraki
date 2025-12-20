@@ -1,21 +1,17 @@
 import { ClienteDto, Cliente } from "@/types/clientes/cliente";
 import { QueryParams, PagedResult } from "@/types/query";
+import { BuildQueryString } from "@/components/QueryString";
+import { GetHeaders } from "@/components/ApiHeaders";
+import { AppSettings } from "../../../config";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:44360";
+const API_BASE_URL = AppSettings.apiUrl;
 
 export class ClienteApiService {
-  private static getHeaders(): HeadersInit {
-    return {
-      "Content-Type": "application/json",
-      // Adicione token de autenticação aqui se necessário
-      // "Authorization": `Bearer ${token}`
-    };
-  }
 
   static async inserir(dto: ClienteDto): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/Cadastros/Cliente`, {
       method: "POST",
-      headers: this.getHeaders(),
+      headers: GetHeaders(),
       body: JSON.stringify(dto),
     });
 
@@ -28,7 +24,7 @@ export class ClienteApiService {
   static async alterar(idCliente: string, dto: ClienteDto): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/Cadastros/Cliente/${idCliente}`, {
       method: "PUT",
-      headers: this.getHeaders(),
+      headers: GetHeaders(),
       body: JSON.stringify(dto),
     });
 
@@ -39,10 +35,10 @@ export class ClienteApiService {
   }
 
   static async listar(params: QueryParams): Promise<PagedResult<Cliente>> {
-    const queryString = this.buildQueryString(params);
+    const queryString = BuildQueryString(params);
     const response = await fetch(`${API_BASE_URL}/Cadastros/Cliente?${queryString}`, {
       method: "GET",
-      headers: this.getHeaders(),
+      headers: GetHeaders(),
     });
 
     if (!response.ok) {
@@ -55,7 +51,7 @@ export class ClienteApiService {
   static async buscarPorId(idCliente: string): Promise<Cliente> {
     const response = await fetch(`${API_BASE_URL}/Cadastros/Cliente/${idCliente}`, {
       method: "GET",
-      headers: this.getHeaders(),
+      headers: GetHeaders(),
     });
 
     if (!response.ok) {
@@ -63,24 +59,5 @@ export class ClienteApiService {
     }
 
     return response.json();
-  }
-
-   private static buildQueryString(params: QueryParams): string {
-    const searchParams = new URLSearchParams();
-    searchParams.append("pageNumber", params.pageNumber.toString());
-    searchParams.append("pageSize", params.pageSize.toString());
-    searchParams.append("sortDescending", params.sortDescending.toString());
-
-    if (params.searchBy) {
-      searchParams.append("searchBy", params.searchBy);
-    }
-    if (params.searchTerm) {
-      searchParams.append("searchTerm", params.searchTerm);
-    }
-    if (params.sortBy) {
-      searchParams.append("sortBy", params.sortBy);
-    }
-
-    return searchParams.toString();
-  }
+  }   
 }
