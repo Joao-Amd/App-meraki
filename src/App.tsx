@@ -7,7 +7,7 @@ import { AppLayout } from "@/components/AppLayout";
 import Index from "./pages/os/OsList";
 import ClienteForm from "./pages/clientes/ClienteForm";
 import ClienteList from "./pages/clientes/ClienteList";
-import ItemForm from "./pages/itens/ItemForm";
+import ItemList from "./pages/itens/ItemList";
 import ServicoForm from "./pages/servicos/ServicoForm";
 import Agenda from "./pages/agenda/Index";
 import Auth from "./pages/login/Auth";
@@ -30,9 +30,9 @@ const App = () => (
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/clientes" element={<ClienteList />} />
-                  <Route path="/cadastro/cliente" element={<ClienteForm />} />
-                  <Route path="/cadastro/item" element={<ItemForm />} />
-                  <Route path="/cadastro/servico" element={<ServicoForm />} />
+                  <Route path="/cliente" element={<ClienteForm />} />
+                  <Route path="/item" element={<ItemList />} />
+                  <Route path="/servico" element={<ServicoForm />} />
                   <Route path="/agenda" element={<Agenda />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

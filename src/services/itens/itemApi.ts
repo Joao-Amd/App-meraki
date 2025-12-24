@@ -2,8 +2,9 @@ import { ItemDto, Item } from "@/types/itens/item";
 import { QueryParams, PagedResult } from "@/types/query";
 import { BuildQueryString } from "@/components/QueryString";
 import { GetHeaders } from "@/components/ApiHeaders";
+import { AppSettings } from "../../../config";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:44360";
+const API_BASE_URL = AppSettings.apiUrl;
 
 export class ItemApiService {
 

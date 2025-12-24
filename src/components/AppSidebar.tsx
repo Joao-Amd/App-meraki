@@ -15,8 +15,8 @@ import {
 const menuItems = [
   { title: "Ordens de Serviço", url: "/", icon: FileText },
   { title: "Clientes", url: "/clientes", icon: Users },
-  { title: "Itens", url: "/cadastro/item", icon: Package },
-  { title: "Serviços", url: "/cadastro/servico", icon: Wrench },
+  { title: "Itens", url: "/item", icon: Package },
+  { title: "Serviços", url: "/servico", icon: Wrench },
   { title: "Agenda", url: "/agenda", icon: Calendar },
 ];
 
@@ -28,7 +28,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Cadastros</SidebarGroupLabel>
+          <SidebarGroupLabel>Módulos</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -38,8 +38,7 @@ export function AppSidebar() {
                       to={item.url}
                       end={item.url === "/"}
                       className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted/50 transition-colors"
-                      activeClassName="bg-primary/10 text-primary font-medium"
-                    >
+                      activeClassName="bg-primary/10 text-primary font-medium">
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </NavLink>

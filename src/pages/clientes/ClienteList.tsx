@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Users, Plus, Building2, User as UserIcon, Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import PageHeader from "@/components/ui/PageHeader";
+
 import {
   Table,
   TableBody,
@@ -95,17 +97,9 @@ const ClienteList = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <Users className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Clientes</h1>
-            <p className="text-muted-foreground">{totalCount} cliente(s) encontrado(s)</p>
-          </div>
-        </div>
-      </div>
+      <PageHeader icon={<Users className="h-6 w-6 text-primary" />}
+        title="Clientes"
+        subtitle={`${totalCount} cliente(s) encontrado(s)`} />
 
       <ListFilters
         searchFields={SEARCH_FIELDS}
@@ -137,7 +131,7 @@ const ClienteList = () => {
               <TableHead>
                 <SortableHeader
                   field="Identificacao"
-                  label="ID"
+                  label="Identificação"
                   currentSortBy={queryParams.sortBy}
                   sortDescending={queryParams.sortDescending}
                   onSort={setSort}
