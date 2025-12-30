@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Package, Plus, Building2, User as UserIcon, Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import PageHeader from "@/components/ui/PageHeader";
 
 import {

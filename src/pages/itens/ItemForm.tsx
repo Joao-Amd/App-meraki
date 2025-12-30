@@ -1,25 +1,183 @@
-import { Package } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import PageFormHeader from "@/components/ui/PageFormHeader";
+import { useNavigate } from "react-router-dom";
+import { useQueryParams } from "@/hooks/useQueryParams";
+import { SearchList } from "@/components/SearchList"; // importar seu SearchList
+import { unidadeApi } from "@/services/unidades/unidadeApi"; // importar unidadeApi
 
-const ItemForm = () => {
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ItemApiService } from "@/services/itens/itemApi";
+import { toast } from "@/hooks/use-toast";
+import { User, Save, X } from "lucide-react";
+
+const itemSchema = z.object({
+  descricao: z.string().min(1, "Descrição é obrigatório."),
+  idUnidade: z.string().min(1, "Unidade é obrigatório."),
+  preco: z.string().optional(),
+});
+
+export default function ItemForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { queryParams } = useQueryParams();
+
+  const form = useForm<z.infer<typeof itemSchema>>({
+    resolver: zodResolver(itemSchema),
+    defaultValues: {
+      descricao: "",
+      idUnidade: "",
+      preco: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof itemSchema>) => {
+    setIsLoading(true);
+    try {
+      await ItemApiService.inserir(values as any);
+      toast({
+        title: "Sucesso!",
+        description: "Item cadastrado com sucesso.",
+        duration: 3000,
+      });
+      form.reset();
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message || "Erro ao cadastrar item",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <Package className="h-6 w-6 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold text-foreground">Cadastro de Itens</h1>
-        </div>
-        <p className="text-muted-foreground">
-          Gerencie os itens disponíveis para as ordens de serviço
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background p-6">
+      <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <PageFormHeader
+          title="Cadastro de Item"
+          subtitle="Preencha os dados abaixo para continuar"
+        />
 
-      <div className="bg-card rounded-lg shadow-md p-6">
-        <p className="text-muted-foreground">Em desenvolvimento...</p>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <Card className="shadow-lg border-border/50">
+              <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5">
+                <CardTitle className="flex items-center gap-2">
+                  <User className="h-5 w-5 text-primary" />
+                  Dados
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Descrição */}
+                  <FormField
+                    control={form.control}
+                    name="descricao"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Descrição</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Informe uma descrição para o item"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Unidade com SearchList */}
+                  <FormField
+                    control={form.control}
+                    name="idUnidade"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Unidade</FormLabel>
+                        <FormControl>
+                          <SearchList
+                            placeholder="Buscar unidade..."
+                            onSearch={(term, page) =>
+                              unidadeApi.listar({
+                                pageNumber: page,
+                                pageSize: 10,
+                                searchBy: "sigla",     
+                                searchTerm: term,      
+                                sortBy: "sigla",       
+                                sortDescending: false, 
+                              })
+                            }
+                            onSelect={(u) => field.onChange(u.id)} 
+                            renderItem={(u) => (
+                              <div>
+                                {u.sigla} ({u.identificacao})
+                              </div>
+                            )}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Preço */}
+                  <FormField
+                    control={form.control}
+                    name="preco"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Preço</FormLabel>
+                        <FormControl>
+                          <Input placeholder="00,00" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Botões */}
+            <div className="flex gap-3 justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                onClick={() => navigate("/Item")}
+                disabled={isLoading}
+              >
+                <X className="h-4 w-4" />
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isLoading}
+                className="min-w-[150px]"
+              >
+                <Save className="h-4 w-4" />
+                {isLoading ? "Salvando..." : "Salvar Item"}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
   );
-};
-
-export default ItemForm;
+}

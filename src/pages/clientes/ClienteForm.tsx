@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import PageFormHeader from "@/components/ui/PageFormHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ClienteApiService } from "@/services/clientes/clienteApi";
@@ -58,7 +59,7 @@ const clienteSchema = z.object({
 
 export default function ClienteForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof clienteSchema>>({
     resolver: zodResolver(clienteSchema),
     defaultValues: {
@@ -92,7 +93,7 @@ export default function ClienteForm() {
       toast({
         title: "Sucesso!",
         description: "Cliente cadastrado com sucesso.",
-        duration: 3500
+        duration: 3000
       });
       form.reset();
     } catch (error: any) {
@@ -109,14 +110,9 @@ export default function ClienteForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background p-6">
       <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-foreground">Cadastro de Cliente</h1>
-            <p className="text-muted-foreground mt-2">
-              Preencha os dados do cliente para realizar o cadastro
-            </p>
-          </div>
-        </div>
+        <PageFormHeader
+          title="Cadastro de Cliente"
+          subtitle="Preencha os dados abaixo para continuar" />
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -444,7 +440,7 @@ export default function ClienteForm() {
                 type="button"
                 variant="outline"
                 size="lg"
-                onClick={() => navigate("/clientes")}
+                onClick={() => navigate("/cliente")}
                 disabled={isLoading}
               >
                 <X className="h-4 w-4" />

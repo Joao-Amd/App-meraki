@@ -14,7 +14,7 @@ import {
 
 const menuItems = [
   { title: "Ordens de Serviço", url: "/", icon: FileText },
-  { title: "Clientes", url: "/clientes", icon: Users },
+  { title: "Clientes", url: "/cliente", icon: Users },
   { title: "Itens", url: "/item", icon: Package },
   { title: "Serviços", url: "/servico", icon: Wrench },
   { title: "Agenda", url: "/agenda", icon: Calendar },
