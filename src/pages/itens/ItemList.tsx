@@ -135,7 +135,7 @@ const ItemList = () => {
                                     onSort={setSort}
                                 />
                             </TableHead>
-                            <TableHead>ativo</TableHead>
+                            <TableHead>Ativo</TableHead>
                             <TableHead>Descrição</TableHead>
                             <TableHead>Unidade</TableHead>
                             <TableHead>
@@ -173,9 +173,9 @@ const ItemList = () => {
                                     className="cursor-pointer hover:bg-muted/50"
                                 >
                                     <TableCell className="font-medium">{item.identificacao}</TableCell>
-                                    <TableCell className="font-medium">{item.ativo}</TableCell>
+                                    <TableCell className="font-medium">{item.ativo ? "Ativo" : "Inativo"}</TableCell>
                                     <TableCell className="font-medium">{item.descricao}</TableCell>
-                                    <TableCell className="font-medium">{item.idUnidade}</TableCell>
+                                    <TableCell className="font-medium">{item.unidade.sigla}</TableCell>
                                     <TableCell className="font-medium">{item.preco}</TableCell>
                                 </TableRow>
                             ))

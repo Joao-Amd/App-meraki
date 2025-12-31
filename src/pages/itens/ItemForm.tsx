@@ -84,7 +84,6 @@ export default function ItemForm() {
               </CardHeader>
               <CardContent className="pt-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Descrição */}
                   <FormField
                     control={form.control}
                     name="descricao"
@@ -102,40 +101,43 @@ export default function ItemForm() {
                     )}
                   />
 
-                  {/* Unidade com SearchList */}
                   <FormField
                     control={form.control}
                     name="idUnidade"
-                    render={({ field }) => (
-                      <FormItem className="md:col-span-2">
-                        <FormLabel>Unidade</FormLabel>
-                        <FormControl>
-                          <SearchList
-                            placeholder="Buscar unidade..."
-                            onSearch={(term, page) =>
-                              unidadeApi.listar({
-                                pageNumber: page,
-                                pageSize: 10,
-                                searchBy: "sigla",     
-                                searchTerm: term,      
-                                sortBy: "sigla",       
-                                sortDescending: false, 
-                              })
-                            }
-                            onSelect={(u) => field.onChange(u.id)} 
-                            renderItem={(u) => (
-                              <div>
-                                {u.sigla} ({u.identificacao})
-                              </div>
-                            )}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    render={({ field }) => {
+                      const [selectedUnit, setSelectedUnit] = useState<{ id: string; sigla: string } | null>(null);
+
+                      return (
+                        <FormItem className="md:col-span-2">
+                          <FormLabel>Unidade</FormLabel>
+                          <FormControl>
+                            <SearchList
+                              placeholder="Buscar unidade..."
+                              onSearch={(term, page) =>
+                                unidadeApi.listar({
+                                  pageNumber: page,
+                                  pageSize: 10,
+                                  searchBy: "sigla",
+                                  searchTerm: term,
+                                  sortBy: "sigla",
+                                  sortDescending: false,
+                                })
+                              }
+                              onSelect={(u: { id: string; sigla: string }) => {
+                                form.setValue("idUnidade", u.id, { shouldValidate: true });
+                                setSelectedUnit(u); // pai controla sigla
+                              }}
+                              renderItem={(u: { id: string; sigla: string }) => <div>{u.sigla}</div>}
+                              selectedItem={selectedUnit ? selectedUnit.sigla : ""}
+                              setSelectedItem={() => setSelectedUnit(null)} // só limpa ao digitar/backspace
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
                   />
 
-                  {/* Preço */}
                   <FormField
                     control={form.control}
                     name="preco"
@@ -153,7 +155,6 @@ export default function ItemForm() {
               </CardContent>
             </Card>
 
-            {/* Botões */}
             <div className="flex gap-3 justify-end">
               <Button
                 type="button"

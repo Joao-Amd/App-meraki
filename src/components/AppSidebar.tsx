@@ -24,7 +24,9 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="p-4 border-b border-border">
-        <h2 className="text-lg font-bold text-green-700">Meraki OS</h2>
+        <h2 className="text-lg font-extrabold" style={{ color: "#7e63e2" }}>
+          MERAKI OS
+        </h2>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

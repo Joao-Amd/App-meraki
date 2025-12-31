@@ -1,3 +1,6 @@
+import { Unidade } from "@/types/unidades/unidade";
+
+
 export interface ItemDto{
     descricao : string;
     idUnidade : string;
@@ -11,4 +14,5 @@ export interface Item{
     preco : number;
     idUnidade : string;
     ativo : boolean;
+    unidade : Unidade;
 }
