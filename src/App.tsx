@@ -13,6 +13,7 @@ import ServicoForm from "./pages/servicos/ServicoForm";
 import Agenda from "./pages/agenda/Index";
 import Auth from "./pages/login/Auth";
 import NotFound from "./pages/NotFound";
+import ServicoList from "./pages/servicos/ServicoList";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,8 @@ const App = () => (
                   <Route path="/cadastro/cliente" element={<ClienteForm />} />
                   <Route path="/item" element={<ItemList />} />
                   <Route path="/cadastro/item" element={<ItemForm />} />
-                  <Route path="/servico" element={<ServicoForm />} />
+                  <Route path="/servico" element={<ServicoList />} />
+                  <Route path="/cadastro/servico" element={<ServicoForm />} />
                   <Route path="/agenda" element={<Agenda />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

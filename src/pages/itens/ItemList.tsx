@@ -172,11 +172,11 @@ const ItemList = () => {
                                     key={item.id}
                                     className="cursor-pointer hover:bg-muted/50"
                                 >
-                                    <TableCell className="font-medium">{item.identificacao}</TableCell>
-                                    <TableCell className="font-medium">{item.ativo ? "Ativo" : "Inativo"}</TableCell>
+                                    <TableCell className="font-normal text-purple-600">{item.identificacao}</TableCell>
+                                    <TableCell className="font-normal">{item.ativo ? "Ativo" : "Inativo"}</TableCell>
                                     <TableCell className="font-medium">{item.descricao}</TableCell>
-                                    <TableCell className="font-medium">{item.unidade.sigla}</TableCell>
-                                    <TableCell className="font-medium">{item.preco}</TableCell>
+                                    <TableCell className="font-normal">{item.unidade.sigla}</TableCell>
+                                    <TableCell className="font-medium text-green-600">{item.preco}</TableCell>
                                 </TableRow>
                             ))
                         )}
