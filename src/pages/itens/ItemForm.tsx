@@ -55,9 +55,16 @@ export default function ItemForm() {
       });
       form.reset();
     } catch (error: any) {
+      let errorMessage = "Erro ao cadastrar item";
+      try {
+        const parsed = JSON.parse(error.message || error.Message);
+        errorMessage = parsed.Message || errorMessage;
+      } catch {
+        errorMessage = error.Message || error.message || errorMessage;
+      }
       toast({
         title: "Erro",
-        description: error.message || "Erro ao cadastrar item",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -129,7 +136,7 @@ export default function ItemForm() {
                               }}
                               renderItem={(u: { id: string; sigla: string }) => <div>{u.sigla}</div>}
                               selectedItem={selectedUnit ? selectedUnit.sigla : ""}
-                              setSelectedItem={() => setSelectedUnit(null)} // só limpa ao digitar/backspace
+                              setSelectedItem={() => setSelectedUnit(null)} 
                             />
                           </FormControl>
                           <FormMessage />

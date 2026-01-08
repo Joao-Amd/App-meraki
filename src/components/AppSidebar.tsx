@@ -17,7 +17,7 @@ const menuItems = [
   { title: "Clientes", url: "/cliente", icon: Users },
   { title: "Itens", url: "/item", icon: Package },
   { title: "Serviços", url: "/servico", icon: Wrench },
-  { title: "Agenda", url: "/agenda", icon: Calendar },
+  // { title: "Agenda", url: "/agenda", icon: Calendar },
 ];
 
 export function AppSidebar() {

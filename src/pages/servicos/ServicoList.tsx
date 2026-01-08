@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Package, Plus, Building2, User as UserIcon, Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/ui/PageHeader";
-
+import { Pencil } from "lucide-react"; 
 import {
     Table,
     TableBody,
@@ -96,7 +96,7 @@ const ServicoList = () => {
 
         <div className="container mx-auto px-4 py-8">
             <PageHeader icon={<Package className="h-6 w-6 text-primary" />}
-                title="servicos"
+                title="Serviços"
                 subtitle={`${totalCount} Serviço(s) encontrado(s)`} />
 
             <ListFilters
@@ -122,11 +122,11 @@ const ServicoList = () => {
                 }
             />
 
-            <div className="bg-card rounded-lg shadow-md overflow-hidden">
+            <div className="table-fixed w-full">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>
+                            <TableHead className="w-1/5">
                                 <SortableHeader
                                     field="Identificacao"
                                     label="Identificação"
@@ -135,9 +135,9 @@ const ServicoList = () => {
                                     onSort={setSort}
                                 />
                             </TableHead>
-                            <TableHead>Ativo</TableHead>
-                            <TableHead>Descrição</TableHead>
-                            <TableHead>
+                            <TableHead className="w-1/5">Ativo</TableHead>
+                            <TableHead className="w-1/5">Descrição</TableHead>
+                            <TableHead className="w-1/5">
                                 <SortableHeader
                                     field="Preco"
                                     label="Preço"
@@ -146,6 +146,7 @@ const ServicoList = () => {
                                     onSort={setSort}
                                 />
                             </TableHead>
+                            <TableHead className="w-1/5 text-center">Editar</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -171,10 +172,20 @@ const ServicoList = () => {
                                     key={Servico.id}
                                     className="cursor-pointer hover:bg-muted/50"
                                 >
-                                    <TableCell className="font-normal text-purple-600">{Servico.identificacao}</TableCell>
-                                    <TableCell className="font-normal">{Servico.ativo ? "Ativo" : "Inativo"}</TableCell>
-                                    <TableCell className="font-medium">{Servico.descricao}</TableCell>
-                                    <TableCell className="font-medium text-green-600">{Servico.preco}</TableCell>
+                                    <TableCell className="w-1/5 font-normal text-purple-600">{Servico.identificacao}</TableCell>
+                                    <TableCell className="w-1/5 font-normal">{Servico.ativo ? "Ativo" : "Inativo"}</TableCell>
+                                    <TableCell className="w-1/5 font-medium">{Servico.descricao}</TableCell>
+                                    <TableCell className="w-1/5 text-green-600">
+                                        {new Intl.NumberFormat("pt-BR", {
+                                            style: "currency",
+                                            currency: "BRL",
+                                        }).format(Servico.preco)}
+                                    </TableCell>
+                                    <TableCell className="w-1/6 text-center">
+                                        <Button variant="ghost" size="icon" onClick={() => navigate(`/alterar/item/${Servico.id}`)}>
+                                            <Pencil className="h-4 w-4 text-blue-600" />
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         )}

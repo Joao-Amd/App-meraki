@@ -124,7 +124,7 @@ const ClienteList = () => {
         }
       />
 
-      <div className="bg-card rounded-lg shadow-md overflow-hidden">
+      <div className="table-fixed w-full">
         <Table>
           <TableHeader>
             <TableRow>
@@ -174,19 +174,30 @@ const ClienteList = () => {
                   key={cliente.id}
                   className="cursor-pointer hover:bg-muted/50"
                 >
-                  <TableCell className="font-medium">{cliente.identificacao}</TableCell>
+                  <TableCell className="font-normal text-purple-600">{cliente.identificacao}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {cliente.tipoPessoa === TipoPessoa.Juridica ? (
-                        <Building2 className="h-4 w-4 text-muted-foreground" />
+                        <Building2 className="h-4 w-4  text-blue-600" />
                       ) : (
-                        <UserIcon className="h-4 w-4 text-muted-foreground" />
+                        <UserIcon className="h-4 w-4 text-green-600" />
                       )}
-                      <span>{cliente.nome}</span>
+                      <span className="font-bold">
+                        {cliente.tipoPessoa === TipoPessoa.Juridica
+                        ? cliente.dadosCorporativo.nomeFantasia + " (" + cliente.nome + ")"
+                        : cliente.nome}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={cliente.tipoPessoa === TipoPessoa.Juridica ? "default" : "secondary"}>
+                    <Badge
+                      variant={cliente.tipoPessoa === TipoPessoa.Juridica ? "default" : "secondary"}
+                      className={
+                        cliente.tipoPessoa === TipoPessoa.Juridica
+                          ? "bg-blue-100 text-blue-700 border border-blue-300"
+                          : "bg-green-100 text-green-700 border border-green-300"
+                      }
+                    >
                       {cliente.tipoPessoa === TipoPessoa.Juridica ? "Jurídica" : "Física"}
                     </Badge>
                   </TableCell>

@@ -5,6 +5,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import InputMask from "react-input-mask";
 import {
   Form,
   FormControl,
@@ -28,24 +29,27 @@ import { TipoPessoa } from "@/types/clientes/cliente";
 import { toast } from "@/hooks/use-toast";
 import { User, Building2, MapPin, Phone, Mail, Save, X } from "lucide-react";
 
+const somenteNumeros = (val: string) => val.replace(/\D/g, "");
+
 const clienteSchema = z.object({
   nome: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
   tipoPessoa: z.nativeEnum(TipoPessoa),
-  cpf: z.string().optional(),
-  cnpj: z.string().optional(),
-  razaoSocial: z.string().optional(),
+
+  cpf: z.string().optional().transform(somenteNumeros),
+  cnpj: z.string().optional().transform(somenteNumeros),
+
   nomeFantasia: z.string().optional(),
-  inscricaoEstadual: z.string().optional(),
-  inscricaoMunicipal: z.string().optional(),
   logradouro: z.string().min(1, "Logradouro é obrigatório"),
   numero: z.string().optional(),
   complemento: z.string().optional(),
   bairro: z.string().min(1, "Bairro é obrigatório"),
   cidade: z.string().min(1, "Cidade é obrigatória"),
   uf: z.string().length(2, "UF deve ter 2 caracteres"),
-  cep: z.string().min(8, "CEP inválido"),
-  telefone: z.string().optional(),
-  celular: z.string().min(1, "Celular é obrigatório"),
+
+  cep: z.string().min(8, "CEP inválido").transform(somenteNumeros),
+  telefone: z.string().optional().transform(somenteNumeros),
+  celular: z.string().min(1, "Celular é obrigatório").transform(somenteNumeros),
+
   email: z.string().email("Email inválido"),
 }).refine((data) => {
   if (data.tipoPessoa === TipoPessoa.Fisica) {
@@ -67,10 +71,7 @@ export default function ClienteForm() {
       tipoPessoa: TipoPessoa.Fisica,
       cpf: "",
       cnpj: "",
-      razaoSocial: "",
       nomeFantasia: "",
-      inscricaoEstadual: "",
-      inscricaoMunicipal: "",
       logradouro: "",
       numero: "",
       complemento: "",
@@ -97,11 +98,19 @@ export default function ClienteForm() {
       });
       form.reset();
     } catch (error: any) {
+      let errorMessage = "Erro ao cadastrar cliente";
+      try {
+        const parsed = JSON.parse(error.message || error.Message);
+        errorMessage = parsed.Message || errorMessage;
+      } catch {
+        errorMessage = error.Message || error.message || errorMessage;
+      }
       toast({
         title: "Erro",
-        description: error.message || "Erro ao cadastrar cliente",
+        description: errorMessage,
         variant: "destructive",
       });
+
     } finally {
       setIsLoading(false);
     }
@@ -156,9 +165,9 @@ export default function ClienteForm() {
                     name="nome"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
-                        <FormLabel>Nome Completo</FormLabel>
+                        <FormLabel>Nome</FormLabel>
                         <FormControl>
-                          <Input placeholder="Digite o nome completo" {...field} />
+                          <Input placeholder="Digite o nome" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -167,18 +176,17 @@ export default function ClienteForm() {
                 </div>
 
                 {tipoPessoa === TipoPessoa.Fisica ? (
-                  <FormField
-                    control={form.control}
-                    name="cpf"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>CPF</FormLabel>
-                        <FormControl>
-                          <Input placeholder="000.000.000-00" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                  <FormField control={form.control} name="cpf" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>CPF</FormLabel>
+                      <FormControl>
+                        <InputMask mask="999.999.999-99" placeholder="000.000.000-00" {...field} >
+                          {(inputProps: any) => <Input {...inputProps} />}
+                        </InputMask>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                   />
                 ) : (
                   <>
@@ -188,19 +196,6 @@ export default function ClienteForm() {
                       Dados Corporativos
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="razaoSocial"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Razão Social</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Razão Social" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
 
                       <FormField
                         control={form.control}
@@ -215,7 +210,6 @@ export default function ClienteForm() {
                           </FormItem>
                         )}
                       />
-
                       <FormField
                         control={form.control}
                         name="cnpj"
@@ -223,35 +217,13 @@ export default function ClienteForm() {
                           <FormItem>
                             <FormLabel>CNPJ</FormLabel>
                             <FormControl>
-                              <Input placeholder="00.000.000/0000-00" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="inscricaoEstadual"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Inscrição Estadual</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Inscrição Estadual" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="inscricaoMunicipal"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Inscrição Municipal</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Inscrição Municipal" {...field} />
+                              <InputMask
+                                mask="99.999.999/9999-99"
+                                placeholder="00.000.000/0000-00"
+                                {...field}
+                              >
+                                {(inputProps: any) => <Input {...inputProps} />}
+                              </InputMask>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -280,13 +252,18 @@ export default function ClienteForm() {
                       <FormItem>
                         <FormLabel>CEP</FormLabel>
                         <FormControl>
-                          <Input placeholder="00000-000" {...field} />
+                          <InputMask
+                            mask="99999-999"
+                            placeholder="00000-000"
+                            {...field}
+                          >
+                            {(inputProps: any) => <Input {...inputProps} />}
+                          </InputMask>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="logradouro"
@@ -393,13 +370,18 @@ export default function ClienteForm() {
                       <FormItem>
                         <FormLabel>Telefone</FormLabel>
                         <FormControl>
-                          <Input placeholder="(00) 0000-0000" {...field} />
+                          <InputMask
+                            mask="(99) 9999-9999"
+                            placeholder="(00) 0000-0000"
+                            {...field}
+                          >
+                            {(inputProps: any) => <Input {...inputProps} />}
+                          </InputMask>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="celular"
@@ -407,13 +389,18 @@ export default function ClienteForm() {
                       <FormItem>
                         <FormLabel>Celular *</FormLabel>
                         <FormControl>
-                          <Input placeholder="(00) 00000-0000" {...field} />
+                          <InputMask
+                            mask="(99) 99999-9999"
+                            placeholder="(00) 00000-0000"
+                            {...field}
+                          >
+                            {(inputProps: any) => <Input {...inputProps} />}
+                          </InputMask>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="email"

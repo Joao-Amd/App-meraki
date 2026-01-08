@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Package, Plus, Building2, User as UserIcon, Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/ui/PageHeader";
-
+import { Pencil } from "lucide-react"; 
 import {
     Table,
     TableBody,
@@ -122,11 +122,11 @@ const ItemList = () => {
                 }
             />
 
-            <div className="bg-card rounded-lg shadow-md overflow-hidden">
+            <div className="table-fixed w-full">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>
+                            <TableHead className="w-1/6">
                                 <SortableHeader
                                     field="Identificacao"
                                     label="Identificação"
@@ -135,10 +135,10 @@ const ItemList = () => {
                                     onSort={setSort}
                                 />
                             </TableHead>
-                            <TableHead>Ativo</TableHead>
-                            <TableHead>Descrição</TableHead>
-                            <TableHead>Unidade</TableHead>
-                            <TableHead>
+                            <TableHead className="w-1/6">Ativo</TableHead>
+                            <TableHead className="w-1/6">Descrição</TableHead>
+                            <TableHead className="w-1/6">Unidade</TableHead>
+                            <TableHead className="w-1/6">
                                 <SortableHeader
                                     field="Preco"
                                     label="Preço"
@@ -147,6 +147,7 @@ const ItemList = () => {
                                     onSort={setSort}
                                 />
                             </TableHead>
+                            <TableHead className="w-1/6 text-center">Editar</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -166,17 +167,26 @@ const ItemList = () => {
                                 </TableCell>
                             </TableRow>
                         ) : (
-
                             itens.map((item) => (
                                 <TableRow
                                     key={item.id}
                                     className="cursor-pointer hover:bg-muted/50"
                                 >
-                                    <TableCell className="font-normal text-purple-600">{item.identificacao}</TableCell>
-                                    <TableCell className="font-normal">{item.ativo ? "Ativo" : "Inativo"}</TableCell>
-                                    <TableCell className="font-medium">{item.descricao}</TableCell>
-                                    <TableCell className="font-normal">{item.unidade.sigla}</TableCell>
-                                    <TableCell className="font-medium text-green-600">{item.preco}</TableCell>
+                                    <TableCell className="w-1/6 font-normal text-purple-600">{item.identificacao}</TableCell>
+                                    <TableCell className="w-1/6 font-normal">{item.ativo ? "Ativo" : "Inativo"}</TableCell>
+                                    <TableCell className="w-1/6 font-medium">{item.descricao}</TableCell>
+                                    <TableCell className="w-1/6 font-normal">{item.unidade.sigla}</TableCell>
+                                    <TableCell className="w-1/6 text-green-600">
+                                        {new Intl.NumberFormat("pt-BR", {
+                                            style: "currency",
+                                            currency: "BRL",
+                                        }).format(item.preco)}
+                                    </TableCell>
+                                    <TableCell className="w-1/6 text-center">
+                                        <Button variant="ghost" size="icon" onClick={() => navigate(`/alterar/item/${item.id}`)}>
+                                            <Pencil className="h-4 w-4 text-blue-600" />
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         )}

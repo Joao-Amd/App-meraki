@@ -51,9 +51,16 @@ export default function ServicoForm() {
       });
       form.reset();
     } catch (error: any) {
+ let errorMessage = "Erro ao cadastrar serviço";
+      try {
+        const parsed = JSON.parse(error.message || error.Message);
+        errorMessage = parsed.Message || errorMessage;
+      } catch {
+        errorMessage = error.Message || error.message || errorMessage;
+      }
       toast({
         title: "Erro",
-        description: error.message || "Erro ao cadastrar serviço",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

@@ -37,7 +37,7 @@ const App = () => (
                   <Route path="/cadastro/item" element={<ItemForm />} />
                   <Route path="/servico" element={<ServicoList />} />
                   <Route path="/cadastro/servico" element={<ServicoForm />} />
-                  <Route path="/agenda" element={<Agenda />} />
+                  {/* <Route path="/agenda" element={<Agenda />} /> */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </AppLayout>
