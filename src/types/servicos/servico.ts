@@ -1,4 +1,5 @@
 export interface ServicoDto{
+    ativo: boolean;
     descricao : string;
     preco : number
 }

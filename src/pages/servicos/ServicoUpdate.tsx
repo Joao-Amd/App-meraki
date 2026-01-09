@@ -1,0 +1,182 @@
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { NumericFormat } from "react-number-format";
+import { useLocation } from "react-router-dom";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ServicoApiService } from "@/services/servicos/servicoApi";
+import { toast } from "@/hooks/use-toast";
+import { User, Save, X } from "lucide-react";
+import { Servico } from "@/types/servicos/servico";
+import { Switch } from "@/components/ui/switch";
+
+const servicoSchema = z.object({
+    descricao: z.string().min(1, "Descrição é obrigatória."),
+    preco: z.string().optional(),
+    ativo: z.boolean().default(true),
+});
+
+export default function ServicoUpdate() {
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const servico = location.state?.servico as Servico | undefined;
+
+    const form = useForm<z.infer<typeof servicoSchema>>({
+        resolver: zodResolver(servicoSchema),
+        defaultValues: {
+            descricao: servico.descricao,
+            preco: servico?.preco != null ? String(servico.preco) : "",
+            ativo: servico.ativo
+        },
+    });
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background p-6">
+            <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
+                <h1 className="text-2xl font-bold text-foreground">Alterar Serviço</h1>
+                <p className="text-muted-foreground">Atualize os dados abaixo</p>
+
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off" className="space-y-6">
+                        <Card className="shadow-lg border-border/50">
+                            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5">
+                                <CardTitle className="flex items-center gap-2">
+                                    <User className="h-5 w-5 text-primary" />
+                                    Dados
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="pt-6 space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="ativo"
+                                        render={({ field }) => (
+                                            <FormItem className="md:col-span-2">
+                                                <div className="flex items-center gap-4 px-1 py-2">
+                                                    <FormLabel className="text-base font-medium">Ativo</FormLabel>
+                                                    <FormControl>
+                                                        <Switch
+                                                            checked={field.value}
+                                                            onCheckedChange={field.onChange}
+                                                        />
+                                                    </FormControl>
+                                                </div>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="descricao"
+                                        render={({ field }) => (
+                                            <FormItem className="md:col-span-2">
+                                                <FormLabel>Descrição</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Informe uma descrição para o serviço" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="preco"
+                                        render={({ field }) => (
+                                            <FormItem className="md:col-span-2">
+                                                <FormLabel>Preço</FormLabel>
+                                                <FormControl>
+                                                    <NumericFormat
+                                                        value={field.value}
+                                                        onValueChange={(values) => {
+                                                            form.setValue("preco", values.value);
+                                                        }}
+                                                        thousandSeparator="."
+                                                        decimalSeparator=","
+                                                        prefix="R$ "
+                                                        allowNegative={false}
+                                                        customInput={Input}
+                                                        placeholder="R$ 0,00"
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <div className="flex gap-3 justify-end">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                onClick={() => navigate("/servico")}
+                                disabled={isLoading}
+                            >
+                                <X className="h-4 w-4" />
+                                Cancelar
+                            </Button>
+                            <Button
+                                type="submit"
+                                size="lg"
+                                disabled={isLoading}
+                                className="min-w-[150px]"
+                            >
+                                <Save className="h-4 w-4" />
+                                {isLoading ? "Salvando..." : "Salvar Alterações"}
+                            </Button>
+                        </div>
+                    </form>
+                </Form>
+            </div>
+        </div>
+    );
+
+    async function onSubmit(values: z.infer<typeof servicoSchema>) {
+        setIsLoading(true);
+        try {
+            await ServicoApiService.alterar(servico.id!, {
+                descricao: values.descricao,
+                preco: Number(values.preco) || 0,
+                ativo: values.ativo,
+            });
+            toast({
+                title: "Sucesso!",
+                description: "Serviço alterado com sucesso.",
+                duration: 3000,
+            });
+            navigate("/servico");
+        } catch (error: any) {
+            let errorMessage = "Erro ao alterar serviço";
+            try {
+                const parsed = JSON.parse(error.message || error.Message);
+                errorMessage = parsed.Message || errorMessage;
+            } catch {
+                errorMessage = error.Message || error.message || errorMessage;
+            }
+            toast({
+                title: "Erro",
+                description: errorMessage,
+                variant: "destructive",
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    }
+}

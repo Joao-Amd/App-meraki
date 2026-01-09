@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Package, Plus, Building2, User as UserIcon, Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/ui/PageHeader";
-import { Pencil } from "lucide-react"; 
+import { Pencil } from "lucide-react";
 import {
     Table,
     TableBody,
@@ -89,6 +89,30 @@ const ServicoList = () => {
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
+        }
+    };
+
+    const handleEditarServico = async (id: string) => {
+        try {
+            const servico = await ServicoApiService.buscarPorId(id);
+
+             if (!servico) {
+                throw new Error("Serviço não encontrado.");
+            }
+            navigate(`/alterar/servico`, { state: { servico } });
+        } catch (error: any) {
+            let mensagem = "Erro ao buscar serviço.";
+            try {
+                const parsed = JSON.parse(error.message || error.Message);
+                mensagem = parsed.Message || mensagem;
+            } catch {
+                mensagem = error.Message || error.message || mensagem;
+            }
+            toast({
+                title: "Erro",
+                description: mensagem,
+                variant: "destructive",
+            });
         }
     };
 
@@ -182,7 +206,7 @@ const ServicoList = () => {
                                         }).format(Servico.preco)}
                                     </TableCell>
                                     <TableCell className="w-1/6 text-center">
-                                        <Button variant="ghost" size="icon" onClick={() => navigate(`/alterar/item/${Servico.id}`)}>
+                                        <Button variant="ghost" size="icon" onClick={() => handleEditarServico(Servico.id)}>
                                             <Pencil className="h-4 w-4 text-blue-600" />
                                         </Button>
                                     </TableCell>

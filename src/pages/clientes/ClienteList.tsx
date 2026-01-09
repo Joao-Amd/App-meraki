@@ -3,7 +3,7 @@ import { Users, Plus, Building2, User as UserIcon, Phone, Mail, MapPin } from "l
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import PageHeader from "@/components/ui/PageHeader";
-
+import { Pencil } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -22,6 +22,7 @@ import { ListFilters, SortableHeader, Pagination, FilterSelect } from "@/compone
 const SEARCH_FIELDS = [
   { value: "Nome", label: "Nome" },
   { value: "Cpf", label: "CPF" },
+  { value: "Identificacao", label: "Identificação" },
   { value: "Identificacao", label: "Identificação" },
 ];
 
@@ -95,6 +96,26 @@ const ClienteList = () => {
     }
   };
 
+  const handleEditarCliente = async (id: string) => {
+    try {
+      const cliente = await ClienteApiService.buscarPorId(id);
+      navigate(`/alterar/cliente`, { state: { cliente } });
+    } catch (error: any) {
+      let mensagem = "Erro ao buscar cliente.";
+      try {
+        const parsed = JSON.parse(error.message || error.Message);
+        mensagem = parsed.Message || mensagem;
+      } catch {
+        mensagem = error.Message || error.message || mensagem;
+      }
+      toast({
+        title: "Erro",
+        description: mensagem,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <PageHeader icon={<Users className="h-6 w-6 text-primary" />}
@@ -147,6 +168,7 @@ const ClienteList = () => {
                 />
               </TableHead>
               <TableHead>Tipo</TableHead>
+              <TableHead className="w-1/6">Ativo</TableHead>
               <TableHead>CPF/CNPJ</TableHead>
               <TableHead>Contato</TableHead>
               <TableHead>Cidade</TableHead>
@@ -184,8 +206,8 @@ const ClienteList = () => {
                       )}
                       <span className="font-bold">
                         {cliente.tipoPessoa === TipoPessoa.Juridica
-                        ? cliente.dadosCorporativo.nomeFantasia + " (" + cliente.nome + ")"
-                        : cliente.nome}
+                          ? cliente.dadosCorporativo.nomeFantasia + " (" + cliente.nome + ")"
+                          : cliente.nome}
                       </span>
                     </div>
                   </TableCell>
@@ -201,6 +223,7 @@ const ClienteList = () => {
                       {cliente.tipoPessoa === TipoPessoa.Juridica ? "Jurídica" : "Física"}
                     </Badge>
                   </TableCell>
+                  <TableCell className="w-1/6 font-normal">{cliente.ativo ? "Ativo" : "Inativo"}</TableCell>
                   <TableCell>
                     {cliente.tipoPessoa === TipoPessoa.Juridica
                       ? cliente.dadosCorporativo?.cnpj
@@ -229,6 +252,11 @@ const ClienteList = () => {
                         {cliente.endereco.cidade}/{cliente.endereco.uf}
                       </span>
                     )}
+                  </TableCell>
+                  <TableCell className="w-1/6 text-center">
+                    <Button variant="ghost" size="icon" onClick={() => handleEditarCliente(cliente.id)}>
+                      <Pencil className="h-4 w-4 text-blue-600" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))

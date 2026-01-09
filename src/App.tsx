@@ -7,10 +7,13 @@ import { AppLayout } from "@/components/AppLayout";
 import Index from "./pages/os/OsList";
 import ClienteForm from "./pages/clientes/ClienteForm";
 import ClienteList from "./pages/clientes/ClienteList";
+import ClienteUpdate from "./pages/clientes/ClienteUpdate";
 import ItemList from "./pages/itens/ItemList";
 import ItemForm from "./pages/itens/ItemForm";
+import ItemUpdate from "./pages/itens/ItemUpdate";
 import ServicoForm from "./pages/servicos/ServicoForm";
-import Agenda from "./pages/agenda/Index";
+import ServicoUpdate from "./pages/servicos/ServicoUpdate";
+// import Agenda from "./pages/agenda/Index";
 import Auth from "./pages/login/Auth";
 import NotFound from "./pages/NotFound";
 import ServicoList from "./pages/servicos/ServicoList";
@@ -33,10 +36,13 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/cliente" element={<ClienteList />} />
                   <Route path="/cadastro/cliente" element={<ClienteForm />} />
+                  <Route path="/alterar/cliente" element={<ClienteUpdate />} />
                   <Route path="/item" element={<ItemList />} />
                   <Route path="/cadastro/item" element={<ItemForm />} />
+                  <Route path="/alterar/item" element={<ItemUpdate />} />
                   <Route path="/servico" element={<ServicoList />} />
                   <Route path="/cadastro/servico" element={<ServicoForm />} />
+                  <Route path="/alterar/servico" element={<ServicoUpdate />} />
                   {/* <Route path="/agenda" element={<Agenda />} /> */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

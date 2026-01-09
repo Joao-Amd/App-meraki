@@ -33,8 +33,7 @@ const itemSchema = z.object({
 export default function ItemForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { queryParams } = useQueryParams();
-
+  
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
     defaultValues: {
@@ -81,7 +80,7 @@ export default function ItemForm() {
         />
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off" className="space-y-6">
             <Card className="shadow-lg border-border/50">
               <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5">
                 <CardTitle className="flex items-center gap-2">

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Package, Plus, Building2, User as UserIcon, Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/ui/PageHeader";
-import { Pencil } from "lucide-react"; 
+import { Pencil } from "lucide-react";
 import {
     Table,
     TableBody,
@@ -89,6 +89,33 @@ const ItemList = () => {
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
+        }
+    };
+
+    const handleEditarItem = async (id: string) => {
+        try {
+            const item = await ItemApiService.buscarPorId(id);
+
+            if (!item) {
+                throw new Error("Item não encontrado.");
+            }
+
+            navigate(`/alterar/item`, { state: { item } });
+        } catch (error: any) {
+            let mensagem = "Erro ao buscar item.";
+
+            try {
+                const parsed = JSON.parse(error.message || error.Message);
+                mensagem = parsed.Message || mensagem;
+            } catch {
+                mensagem = error.Message || error.message || mensagem;
+            }
+
+            toast({
+                title: "Erro",
+                description: mensagem,
+                variant: "destructive",
+            });
         }
     };
 
@@ -183,7 +210,7 @@ const ItemList = () => {
                                         }).format(item.preco)}
                                     </TableCell>
                                     <TableCell className="w-1/6 text-center">
-                                        <Button variant="ghost" size="icon" onClick={() => navigate(`/alterar/item/${item.id}`)}>
+                                        <Button variant="ghost" size="icon" onClick={() => handleEditarItem(item.id)}>
                                             <Pencil className="h-4 w-4 text-blue-600" />
                                         </Button>
                                     </TableCell>
