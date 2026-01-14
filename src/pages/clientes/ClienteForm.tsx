@@ -117,14 +117,14 @@ export default function ClienteForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background p-6 ">
       <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
         <PageFormHeader
           title="Cadastro de Cliente"
           subtitle="Preencha os dados abaixo para continuar" />
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form autoComplete="off" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Informações Gerais */}
             <Card className="shadow-lg border-border/50">
               <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5">
@@ -257,7 +257,7 @@ export default function ClienteForm() {
                             placeholder="00000-000"
                             {...field}
                           >
-                            {(inputProps: any) => <Input {...inputProps} />}
+                            {(inputProps: any) => <Input  {...inputProps} />}
                           </InputMask>
                         </FormControl>
                         <FormMessage />
@@ -271,7 +271,7 @@ export default function ClienteForm() {
                       <FormItem className="md:col-span-2">
                         <FormLabel>Logradouro</FormLabel>
                         <FormControl>
-                          <Input placeholder="Rua, Avenida..." {...field} />
+                          <Input autoComplete="off" readOnly onFocus={(e) => e.currentTarget.removeAttribute("readOnly")} spellCheck={false} placeholder="Rua, Avenida..." {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

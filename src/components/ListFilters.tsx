@@ -11,18 +11,18 @@ import {
 import { FilterOption, SearchField } from "@/types/query";
 
 interface ListFiltersProps {
-  // Search
-  searchFields: SearchField[];
-  searchField: string;
-  onSearchFieldChange: (value: string) => void;
-  searchTerm: string;
-  onSearchTermChange: (value: string) => void;
-  onSearch: () => void;
+  // Search (opcionais)
+  searchFields?: SearchField[];
+  searchField?: string;
+  onSearchFieldChange?: (value: string) => void;
+  searchTerm?: string;
+  onSearchTermChange?: (value: string) => void;
+  onSearch?: () => void;
 
-  // Extra filters (optional)
+  // Extra filters (opcional)
   extraFilters?: React.ReactNode;
 
-  // Actions (optional)
+  // Actions (opcional)
   actions?: React.ReactNode;
 }
 
@@ -37,7 +37,7 @@ export function ListFilters({
   actions,
 }: ListFiltersProps) {
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && onSearch) {
       onSearch();
     }
   };
@@ -47,37 +47,42 @@ export function ListFilters({
       <div className="flex flex-col md:flex-row gap-4">
         {extraFilters}
 
-        <Select value={searchField} onValueChange={onSearchFieldChange}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Buscar por..." />
-          </SelectTrigger>
-          <SelectContent>
-            {searchFields.map((field) => (
-              <SelectItem key={field.value} value={field.value}>
-                {field.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {searchFields && searchField !== undefined && onSearchFieldChange && (
+          <Select value={searchField} onValueChange={onSearchFieldChange}>
+            <SelectTrigger className="w-full md:w-[180px]">
+              <SelectValue placeholder="Buscar por..." />
+            </SelectTrigger>
+            <SelectContent>
+              {searchFields.map((field) => (
+                <SelectItem key={field.value} value={field.value}>
+                  {field.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
-        <div className="flex flex-1 gap-2">
-          <Input
-            placeholder="Digite para buscar..."
-            value={searchTerm}
-            onChange={(e) => onSearchTermChange(e.target.value)}
-            onKeyDown={handleKeyPress}
-            className="flex-1"
-          />
-          <Button onClick={onSearch} variant="secondary">
-            <Search className="h-4 w-4" />
-          </Button>
-        </div>
+        {searchTerm !== undefined && onSearchTermChange && onSearch && (
+          <div className="flex flex-1 gap-2">
+            <Input
+              placeholder="Digite para buscar..."
+              value={searchTerm}
+              onChange={(e) => onSearchTermChange(e.target.value)}
+              onKeyDown={handleKeyPress}
+              className="flex-1"
+            />
+            <Button onClick={onSearch} variant="secondary">
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
 
         {actions}
       </div>
     </div>
   );
 }
+
 
 interface SortableHeaderProps {
   field: string;

@@ -1,4 +1,4 @@
-import { Users, Package, Wrench, Calendar, FileText } from "lucide-react";
+import { Users, Package, Wrench, Boxes, FileText } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
   Sidebar,
@@ -17,6 +17,8 @@ const menuItems = [
   { title: "Clientes", url: "/cliente", icon: Users },
   { title: "Itens", url: "/item", icon: Package },
   { title: "Serviços", url: "/servico", icon: Wrench },
+  { title: "Estoque", url: "/estoque", icon: Boxes },
+
   // { title: "Agenda", url: "/agenda", icon: Calendar },
 ];
 

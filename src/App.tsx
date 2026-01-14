@@ -13,6 +13,8 @@ import ItemForm from "./pages/itens/ItemForm";
 import ItemUpdate from "./pages/itens/ItemUpdate";
 import ServicoForm from "./pages/servicos/ServicoForm";
 import ServicoUpdate from "./pages/servicos/ServicoUpdate";
+import EstoqueList from "./pages/estoques/estoqueList";
+import EstoqueUpdate from "./pages/estoques/estoqueUpdate";
 // import Agenda from "./pages/agenda/Index";
 import Auth from "./pages/login/Auth";
 import NotFound from "./pages/NotFound";
@@ -43,6 +45,8 @@ const App = () => (
                   <Route path="/servico" element={<ServicoList />} />
                   <Route path="/cadastro/servico" element={<ServicoForm />} />
                   <Route path="/alterar/servico" element={<ServicoUpdate />} />
+                  <Route path="/estoque" element={<EstoqueList />} />
+                  <Route path="/alterar/estoque" element={<EstoqueUpdate />} />
                   {/* <Route path="/agenda" element={<Agenda />} /> */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
