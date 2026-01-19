@@ -21,9 +21,7 @@ import { ListFilters, SortableHeader, Pagination, FilterSelect } from "@/compone
 
 const SEARCH_FIELDS = [
   { value: "Nome", label: "Nome" },
-  { value: "Cpf", label: "CPF" },
-  { value: "Identificacao", label: "Identificação" },
-  { value: "Identificacao", label: "Identificação" },
+  { value: "Identificacao", label: "Identificação" }
 ];
 
 const TIPO_PESSOA_OPTIONS = [
@@ -40,7 +38,7 @@ const ClienteList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const { queryParams, setSearch, setSort, setPage, setPageSize } = useQueryParams();
+  const { queryParams, setFilter, setSort, setPage, setPageSize } = useQueryParams();
 
   const [searchField, setSearchField] = useState<string>("Nome");
   const [searchTerm, setSearchTerm] = useState("");
@@ -78,15 +76,15 @@ const ClienteList = () => {
       finalSearchTerm = tipoPessoaFilter;
     }
 
-    setSearch(finalSearchBy, finalSearchTerm);
+    setFilter(finalSearchBy, finalSearchTerm);
   };
 
   const handleTipoPessoaChange = (value: string) => {
     setTipoPessoaFilter(value);
     if (value && value !== "all") {
-      setSearch("TipoPessoa", value);
+      setFilter("TipoPessoa", value);
     } else {
-      setSearch(searchTerm ? searchField : undefined, searchTerm || undefined);
+      setFilter(searchTerm ? searchField : undefined, searchTerm || undefined);
     }
   };
 

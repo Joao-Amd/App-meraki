@@ -36,7 +36,7 @@ const ServicoList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
-    const { queryParams, setSearch, setSort, setPage, setPageSize } = useQueryParams();
+    const { queryParams, setFilter, setSort, setPage, setPageSize } = useQueryParams();
 
     const [searchField, setSearchField] = useState<string>("Descricao");
     const [searchTerm, setSearchTerm] = useState("");
@@ -66,23 +66,19 @@ const ServicoList = () => {
     }, [loadservicos]);
 
     const handleSearch = () => {
-        let finalSearchBy = searchTerm ? searchField : undefined;
-        let finalSearchTerm = searchTerm || undefined;
-
-        if (ativoInativo && ativoInativo !== "all" && !searchTerm) {
-            finalSearchBy = "Ativo";
-            finalSearchTerm = ativoInativo;
+        if (searchTerm) {
+            setFilter(searchField, searchTerm);
+        } else {
+            setFilter(searchField, "")
         }
-
-        setSearch(finalSearchBy, finalSearchTerm);
     };
 
     const handleEstadoServicoChange = (value: string) => {
         setAtivoInativo(value);
         if (value && value !== "all") {
-            setSearch("Ativo", value);
+            setFilter("Ativo", value);
         } else {
-            setSearch(searchTerm ? searchField : undefined, searchTerm || undefined);
+            setFilter("Ativo", "");
         }
     };
 
@@ -96,7 +92,7 @@ const ServicoList = () => {
         try {
             const servico = await ServicoApiService.buscarPorId(id);
 
-             if (!servico) {
+            if (!servico) {
                 throw new Error("Serviço não encontrado.");
             }
             navigate(`/alterar/servico`, { state: { servico } });

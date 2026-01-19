@@ -11,20 +11,10 @@ export function useQueryParams(options: UseQueryParamsOptions = {}) {
   const [queryParams, setQueryParams] = useState<QueryParams>({
     pageNumber: 1,
     pageSize: initialPageSize,
-    searchBy: undefined,
-    searchTerm: undefined,
     sortBy: undefined,
     sortDescending: false,
+    filters: {}
   });
-
-  const setSearch = useCallback((searchBy?: string, searchTerm?: string) => {
-    setQueryParams((prev) => ({
-      ...prev,
-      pageNumber: 1,
-      searchBy,
-      searchTerm,
-    }));
-  }, []);
 
   const setSort = useCallback((field: string) => {
     setQueryParams((prev) => ({
@@ -46,24 +36,35 @@ export function useQueryParams(options: UseQueryParamsOptions = {}) {
     }));
   }, []);
 
-  const resetFilters = useCallback(() => {
-    setQueryParams({
-      pageNumber: 1,
-      pageSize: initialPageSize,
-      searchBy: undefined,
-      searchTerm: undefined,
-      sortBy: undefined,
-      sortDescending: false,
-    });
-  }, [initialPageSize]);
+const setFilter = useCallback((key: string, value: string) => {
+  setQueryParams((prev) => ({
+    ...prev,
+    pageNumber: 1,
+    filters: {
+      ...(prev.filters ?? {}),
+      [key]: value,
+    },
+  }));
+}, []);
+
+const resetFilters = useCallback(() => {
+  setQueryParams({
+    pageNumber: 1,
+    pageSize: initialPageSize,
+    sortBy: undefined,
+    sortDescending: false,
+    filters: {},
+  });
+}, [initialPageSize]);
+
 
   return {
     queryParams,
     setQueryParams,
-    setSearch,
     setSort,
     setPage,
     setPageSize,
     resetFilters,
+    setFilter
   };
 }

@@ -1,24 +1,28 @@
 import { QueryParams } from "@/types/query";
 
-
 const BuildQueryString = (params: QueryParams): string => {
-        const searchParams = new URLSearchParams();
-        searchParams.append("pageNumber", params.pageNumber.toString());
-        searchParams.append("pageSize", params.pageSize.toString());
-        searchParams.append("sortDescending", params.sortDescending.toString());
+  const searchParams = new URLSearchParams();
 
-        if (params.searchBy) {
-            searchParams.append("searchBy", params.searchBy);
-        }
-        if (params.searchTerm) {
-            searchParams.append("searchTerm", params.searchTerm);
-        }
-        if (params.sortBy) {
-            searchParams.append("sortBy", params.sortBy);
-        }
+  searchParams.append("pageNumber", params.pageNumber.toString());
+  searchParams.append("pageSize", params.pageSize.toString());
+  searchParams.append("sortDescending", params.sortDescending.toString());
 
-        return searchParams.toString();
-    };
+  if (params.sortBy) {
+    searchParams.append("sortBy", params.sortBy);
+  }
 
+  if (params.filters) {
+    const filtersString = Object.entries(params.filters)
+      .filter(([_, value]) => value && value.trim().length > 0) 
+      .map(([key, value]) => `${key}:${value.trim()}`)          
+      .join(",");
 
-    export {BuildQueryString}
+    if (filtersString) {
+      searchParams.append("filters", filtersString);
+    }
+  }
+
+  return searchParams.toString();
+};
+
+export {BuildQueryString}

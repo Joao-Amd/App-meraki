@@ -25,6 +25,7 @@ export interface ClienteDto {
 }
 
 export interface Cliente {
+  ativo : boolean;
   id: string;
   identificacao: number;
   nome: string;
