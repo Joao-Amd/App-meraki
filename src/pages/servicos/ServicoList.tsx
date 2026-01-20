@@ -73,6 +73,12 @@ const ServicoList = () => {
         }
     };
 
+        useEffect(() => {
+        if (searchTerm.trim() === ""){
+            handleSearch();
+        }
+    }, [searchTerm])
+    
     const handleEstadoServicoChange = (value: string) => {
         setAtivoInativo(value);
         if (value && value !== "all") {

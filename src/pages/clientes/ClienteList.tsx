@@ -79,6 +79,12 @@ const ClienteList = () => {
     setFilter(finalSearchBy, finalSearchTerm);
   };
 
+      useEffect(() => {
+        if (searchTerm.trim() === ""){
+            handleSearch();
+        }
+    }, [searchTerm])
+    
   const handleTipoPessoaChange = (value: string) => {
     setTipoPessoaFilter(value);
     if (value && value !== "all") {

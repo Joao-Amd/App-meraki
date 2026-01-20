@@ -36,7 +36,7 @@ const ItemList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
-    const { queryParams, setSearch, setSort, setPage, setPageSize } = useQueryParams();
+    const { queryParams, setFilter, setSort, setPage, setPageSize } = useQueryParams();
 
     const [searchField, setSearchField] = useState<string>("Descricao");
     const [searchTerm, setSearchTerm] = useState("");
@@ -66,23 +66,25 @@ const ItemList = () => {
     }, [loadItens]);
 
     const handleSearch = () => {
-        let finalSearchBy = searchTerm ? searchField : undefined;
-        let finalSearchTerm = searchTerm || undefined;
-
-        if (ativoInativo && ativoInativo !== "all" && !searchTerm) {
-            finalSearchBy = "Ativo";
-            finalSearchTerm = ativoInativo;
+        if (searchTerm) {
+            setFilter(searchField, searchTerm);
+        } else {
+            setFilter(searchField, "")
         }
-
-        setSearch(finalSearchBy, finalSearchTerm);
     };
+
+    useEffect(() => {
+        if (searchTerm.trim() === ""){
+            handleSearch();
+        }
+    }, [searchTerm])
 
     const handleEstadoItemChange = (value: string) => {
         setAtivoInativo(value);
         if (value && value !== "all") {
-            setSearch("Ativo", value);
+            setFilter("Ativo", value);
         } else {
-            setSearch(searchTerm ? searchField : undefined, searchTerm || undefined);
+            setFilter(searchTerm ? searchField : undefined, searchTerm || undefined);
         }
     };
 

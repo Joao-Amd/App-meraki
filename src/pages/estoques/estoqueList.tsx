@@ -27,10 +27,11 @@ const EstoqueList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
-    const { queryParams, setSearch, setSort, setPage, setPageSize } = useQueryParams();
+    const { queryParams, setFilter, setPage, setPageSize } = useQueryParams();
 
     const [searchField, setSearchField] = useState<string>("Descricao");
     const [searchTerm, setSearchTerm] = useState("");
+
     const [selectedItem, setSelectedItem] = useState<{ id: string; descricao: string } | null>(null);
 
     const loadEstoques = useCallback(async () => {
@@ -57,10 +58,11 @@ const EstoqueList = () => {
     }, [loadEstoques]);
 
     const handleSearch = () => {
-        let finalSearchBy = searchTerm ? searchField : undefined;
-        let finalSearchTerm = searchTerm || undefined;
-
-        setSearch(finalSearchBy, finalSearchTerm);
+        if (searchTerm) {
+            setFilter(searchField, searchTerm);
+        } else {
+            setFilter(searchField, "")
+        }
     };
 
     const handlePageChange = (newPage: number) => {
@@ -112,8 +114,7 @@ const EstoqueList = () => {
                                 ItemApiService.listar({
                                     pageNumber: page,
                                     pageSize: 10,
-                                    searchBy: "descricao",
-                                    searchTerm: term,
+                                    filters: {"descricao" : term},
                                     sortBy: "descricao",
                                     sortDescending: false,
                                 })
@@ -121,14 +122,14 @@ const EstoqueList = () => {
                             onSelect={(item: { id: string; descricao: string }) => {
                                 // ao selecionar, já aplica o filtro
                                 setSelectedItem(item);
-                                setSearch("IdItem", item.id);
+                                setFilter("IdItem", item.id);
                             }}
                             renderItem={(item: { id: string; descricao: string }) => <div>{item.descricao}</div>}
                             selectedItem={selectedItem ? selectedItem.descricao : ""}
                             setSelectedItem={() => {
                                 // ao remover, limpa o filtro e lista tudo
                                 setSelectedItem(null);
-                                setSearch("IdItem", undefined);
+                                setFilter("IdItem", undefined);
                             }}
                         />
                     </div>

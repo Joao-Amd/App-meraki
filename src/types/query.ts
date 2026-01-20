@@ -1,10 +1,9 @@
 export interface QueryParams {
   pageNumber: number;
   pageSize: number;
-  searchBy?: string;
-  searchTerm?: string;
   sortBy?: string;
   sortDescending: boolean;
+  filters?: Record<string, string>;
 }
 
 export interface PagedResult<T> {
