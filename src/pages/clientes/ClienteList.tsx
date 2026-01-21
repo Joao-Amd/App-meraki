@@ -38,7 +38,7 @@ const ClienteList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const { queryParams, setFilter, setSort, setPage, setPageSize } = useQueryParams();
+  const { queryParams, setFilter, resetFilters, setSort, setPage, setPageSize } = useQueryParams();
 
   const [searchField, setSearchField] = useState<string>("Nome");
   const [searchTerm, setSearchTerm] = useState("");
@@ -79,12 +79,12 @@ const ClienteList = () => {
     setFilter(finalSearchBy, finalSearchTerm);
   };
 
-      useEffect(() => {
-        if (searchTerm.trim() === ""){
-            handleSearch();
-        }
-    }, [searchTerm])
-    
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      resetFilters();
+    } 
+  }, [searchTerm])
+
   const handleTipoPessoaChange = (value: string) => {
     setTipoPessoaFilter(value);
     if (value && value !== "all") {

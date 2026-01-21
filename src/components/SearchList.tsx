@@ -94,8 +94,9 @@ export function SearchList<T>({
   const currentValue = searchTerm.length > 0 ? searchTerm : (selectedItem ?? "");
 
   return (
-    <div className="border rounded-md p-4 bg-muted/50 shadow-sm space-y-4">
+    <div className="relative w-full">
       <Input
+        className="bg-gray-100 border-2 border-purple-400 focus:border-purple-600 focus:ring-purple-600 rounded-md"
         placeholder={placeholder}
         value={currentValue}
         onChange={(e) => {
@@ -106,31 +107,53 @@ export function SearchList<T>({
           setOpen(true);
         }}
         onKeyDown={handleKeyDown}
-        className="mb-2"
       />
 
       {open && (
-        <>
+        <div className="absolute z-50 mt-1 w-full bg-white border border-purple-300 rounded-md shadow-lg max-h-[250px] overflow-y-auto">
           {items.length === 0 ? (
-            <p className="text-xs text-gray-500">Nenhum resultado encontrado.</p>
+            <p className="p-2 text-xs text-gray-500">Nenhum resultado encontrado.</p>
           ) : (
-            <div className="flex flex-col gap-[2px] max-h-[150px] overflow-y-auto overflow-x-hidden">
-              {items.map((item, i) => (
-                <div
-                  key={i}
-                  onClick={() => {
-                    onSelect(item);
-                    setSearchTerm((item as any).sigla ?? "");
-                    setOpen(false);
-                  }}
-                  className="w-full rounded px-2 py-1 cursor-pointer text-[12px] leading-tight transition duration-200 hover:bg-primary/10 hover:shadow-sm hover:scale-[1.01] select-none"
-                >
-                  {renderItem(item)}
-                </div>
-              ))}
-            </div>
+            <>
+              <div className="flex flex-col gap-[2px]">
+                {items.map((item, i) => (
+                  <div
+                    key={i}
+                    onClick={() => {
+                      onSelect(item);
+                      setSearchTerm((item as any).sigla ?? "");
+                      setOpen(false);
+                    }}
+                    className="px-2 py-1 cursor-pointer text-sm hover:bg-purple-50"
+                  >
+                    {renderItem(item)}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-2 justify-center p-2 border-t">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <Button
+                    key={i}
+                    type="button"
+                    className={`h-6 px-2 text-xs ${page === i + 1 ? "opacity-50 cursor-default" : ""}`}
+                    variant="outline"
+                    disabled={page === i + 1}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => {
+                      if (page !== i + 1) {
+                        setPage(i + 1);
+                        setOpen(true);
+                      }
+                    }}
+                  >
+                    {i + 1}
+                  </Button>
+                ))}
+              </div>
+            </>
           )}
-        </>
+        </div>
       )}
 
       {open && items.length > 0 && (

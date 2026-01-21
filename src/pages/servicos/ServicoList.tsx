@@ -36,7 +36,7 @@ const ServicoList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
-    const { queryParams, setFilter, setSort, setPage, setPageSize } = useQueryParams();
+    const { queryParams, setFilter, resetFilters, setSort, setPage, setPageSize } = useQueryParams();
 
     const [searchField, setSearchField] = useState<string>("Descricao");
     const [searchTerm, setSearchTerm] = useState("");
@@ -69,7 +69,7 @@ const ServicoList = () => {
         if (searchTerm) {
             setFilter(searchField, searchTerm);
         } else {
-            setFilter(searchField, "")
+            resetFilters()
         }
     };
 

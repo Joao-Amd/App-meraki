@@ -27,10 +27,7 @@ const EstoqueList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
-    const { queryParams, setFilter, setPage, setPageSize } = useQueryParams();
-
-    const [searchField, setSearchField] = useState<string>("Descricao");
-    const [searchTerm, setSearchTerm] = useState("");
+    const { queryParams, setFilter, resetFilters, setPage, setPageSize } = useQueryParams();
 
     const [selectedItem, setSelectedItem] = useState<{ id: string; descricao: string } | null>(null);
 
@@ -56,14 +53,6 @@ const EstoqueList = () => {
     useEffect(() => {
         loadEstoques();
     }, [loadEstoques]);
-
-    const handleSearch = () => {
-        if (searchTerm) {
-            setFilter(searchField, searchTerm);
-        } else {
-            setFilter(searchField, "")
-        }
-    };
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -107,14 +96,14 @@ const EstoqueList = () => {
 
             <ListFilters
                 extraFilters={
-                    <div className="relative overflow-visible">
+                    <div className="relative w-64">
                         <SearchList
                             placeholder="Buscar item..."
                             onSearch={(term, page) =>
                                 ItemApiService.listar({
                                     pageNumber: page,
                                     pageSize: 10,
-                                    filters: {"descricao" : term},
+                                    filters: { "descricao": term },
                                     sortBy: "descricao",
                                     sortDescending: false,
                                 })
