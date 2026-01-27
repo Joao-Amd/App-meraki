@@ -122,9 +122,8 @@ export default function ItemForm() {
                               onSearch={(term, page) =>
                                 unidadeApi.listar({
                                   pageNumber: page,
-                                  pageSize: 10,
-                                  searchBy: "sigla",
-                                  searchTerm: term,
+                                  pageSize: 5,
+                                  filters: { "sigla": term },
                                   sortBy: "sigla",
                                   sortDescending: false,
                                 })
