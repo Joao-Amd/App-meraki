@@ -33,7 +33,7 @@ const itemSchema = z.object({
 export default function ItemForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
     defaultValues: {
@@ -78,9 +78,17 @@ export default function ItemForm() {
           title="Cadastro de Item"
           subtitle="Preencha os dados abaixo para continuar"
         />
-
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off" className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            autoComplete="off"
+            className="space-y-6"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); 
+              }
+            }}
+          >
             <Card className="shadow-lg border-border/50">
               <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5">
                 <CardTitle className="flex items-center gap-2">
@@ -130,11 +138,10 @@ export default function ItemForm() {
                               }
                               onSelect={(u: { id: string; sigla: string }) => {
                                 form.setValue("idUnidade", u.id, { shouldValidate: true });
-                                setSelectedUnit(u); // pai controla sigla
+                                setSelectedUnit(u);
                               }}
                               renderItem={(u: { id: string; sigla: string }) => <div>{u.sigla}</div>}
-                              selectedItem={selectedUnit ? selectedUnit.sigla : ""}
-                              setSelectedItem={() => setSelectedUnit(null)} 
+                              getLabel={(u: { id: string; sigla: string }) => u.sigla}
                             />
                           </FormControl>
                           <FormMessage />
